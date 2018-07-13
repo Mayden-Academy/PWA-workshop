@@ -1,0 +1,10 @@
+{
+  "name": "PWA Example",
+  "short_name": "PWA Example",
+  "theme_color": "#719e40",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}
