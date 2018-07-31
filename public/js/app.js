@@ -1,4 +1,24 @@
 
+window.addEventListener('online', updateStatus)
+window.addEventListener('offline', updateStatus)
+document.addEventListener('DOMContentLoaded', updateStatus)
+
+function updateStatus() {
+
+    // disable adding todos when offline
+    document.querySelector('button').disabled = !navigator.onLine
+    document.querySelectorAll('.todo input').forEach(function(input) {
+        input.disabled = !navigator.onLine
+    })
+
+    // display offline message
+    if (navigator.onLine === false) {
+        document.querySelector('.offline').innerHTML = 'You are currently offline, data may not be the latest'
+    } else {
+        document.querySelector('.offline').innerHTML = ''
+    }
+}
+
 
 function loadTodos() {
     fetch('/api/todo').then(function (data) {
