@@ -39,7 +39,7 @@ self.addEventListener("fetch", function(event) {
                         //returning response object
                         return response;
                     } else {
-                        log(event.request.url+" not found in cache fetching from network.");
+                        log(event.request.url+" not found in cache, fetching from network.");
 
                         //return promise that resolves to Response object
                         return fetch(event.request);
@@ -79,7 +79,7 @@ self.addEventListener("fetch", function(event) {
 
             return response
 
-        }())
+        }()) // dont forget to call immediately
     }
 
 });
