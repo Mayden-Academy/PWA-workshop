@@ -10,11 +10,8 @@ var filesToCache = [
     "http://localhost:8888/images/icons/icon-144x144.png",
     "http://localhost:8888/manifest.json",
     "http://localhost:8888/",
-    "http://localhost:8888/index.php",
-    "http://localhost:8888/done"
+    "http://localhost:8888/index.php"
 ];
-
-importScripts('js/localforage.js');
 
 self.addEventListener("install", function(event) {
     log('[ServiceWorker] Installing....');
@@ -35,7 +32,8 @@ self.addEventListener("fetch", function(event) {
             caches.match(event.request)
                 .then(function(response) {
                     if(response) {
-                        //log("Fulfilling "+event.request.url+" from cache.");
+                        log("Fulfilling "+event.request.url+" from cache.");
+
                         //returning response object
                         return response;
                     } else {
@@ -47,39 +45,4 @@ self.addEventListener("fetch", function(event) {
                 })
         )
     }
-
-    if (event.request.url === 'http://localhost:8888/api/todo' && event.request.method == 'GET') {
-
-        event.respondWith(async function() {
-            var data = {success:true, msg:'', data: []};
-
-            //if (navigator.onLine === false) {
-            //    optional for doing offline work
-            //}
-
-            let response = await fetch(event.request).catch(async function(err) {
-                await localforage.iterate(function (value, key) {
-                    data.data.push([key, value])
-                })
-
-                if (data.data.length > 0) {
-                    log('Returning cached data');
-                    return await new Response(JSON.stringify(data), {
-                        headers: {"Content-Type": "application/json"}
-                    });
-                }
-            })
-            // clone response as it can only be used once and needs to be returned for client fetch
-            let responseData = await response.clone().json()
-            await localforage.clear()
-            log (responseData)
-            await responseData.data.forEach(function (todo) {
-                localforage.setItem(todo[0], todo[1])
-            })
-
-            return response
-
-        }()) // dont forget to call immediately
-    }
-
 });

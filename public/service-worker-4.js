@@ -51,24 +51,8 @@ self.addEventListener("fetch", function(event) {
     if (event.request.url === 'http://localhost:8888/api/todo' && event.request.method == 'GET') {
 
         event.respondWith(async function() {
-            var data = {success:true, msg:'', data: []};
 
-            //if (navigator.onLine === false) {
-            //    optional for doing offline work
-            //}
-
-            let response = await fetch(event.request).catch(async function(err) {
-                await localforage.iterate(function (value, key) {
-                    data.data.push([key, value])
-                })
-
-                if (data.data.length > 0) {
-                    log('Returning cached data');
-                    return await new Response(JSON.stringify(data), {
-                        headers: {"Content-Type": "application/json"}
-                    });
-                }
-            })
+            let response = await fetch(event.request)
             // clone response as it can only be used once and needs to be returned for client fetch
             let responseData = await response.clone().json()
             await localforage.clear()

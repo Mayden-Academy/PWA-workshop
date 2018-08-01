@@ -51,13 +51,10 @@ self.addEventListener("fetch", function(event) {
     if (event.request.url === 'http://localhost:8888/api/todo' && event.request.method == 'GET') {
 
         event.respondWith(async function() {
-            var data = {success:true, msg:'', data: []};
-
-            //if (navigator.onLine === false) {
-            //    optional for doing offline work
-            //}
 
             let response = await fetch(event.request).catch(async function(err) {
+                var data = {success:true, msg:'', data: []};
+
                 await localforage.iterate(function (value, key) {
                     data.data.push([key, value])
                 })
