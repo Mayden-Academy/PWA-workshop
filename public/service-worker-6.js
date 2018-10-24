@@ -52,9 +52,9 @@ self.addEventListener("fetch", function(event) {
 
         event.respondWith(async function() {
 
-            //if (navigator.onLine === false) {
-            //    optional for doing offline work
-            //}
+            if (navigator.onLine === false) {
+                //optional for doing offline work
+            }
 
             let response = await fetch(event.request).catch(async function(err) {
                 var data = {success:true, msg:'', data: []};
